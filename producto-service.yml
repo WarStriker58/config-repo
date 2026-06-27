@@ -1,16 +1,27 @@
 server:
-  port: 8081
+  port: 8083
 
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/bd_producto_dev
     username: root
     password:
-
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+# Propiedades heredadas de tu configuración local anterior
+empresa:
+  ambiente: desarrollo
+
+# Configuración Eureka centralizada para Producto
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
 mensaje:
   texto: Configuración obtenida desde Config Server para Producto Service
