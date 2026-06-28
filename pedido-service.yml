@@ -15,3 +15,14 @@ eureka:
 
 mensaje:
   texto: Configuración obtenida desde Config Server para Pedido Service
+
+# 🛡️ RESILIENCE4J EN LA NUBE PARA PEDIDOS
+resilience4j:
+  circuitbreaker:
+    instances:
+      productoService: # Debe coincidir con el 'name' de la anotación en ProductoCircuitService
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
