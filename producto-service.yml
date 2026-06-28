@@ -1,10 +1,18 @@
+server:
+  port: 8083
+
 spring:
-  application:
-    name: producto-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/bd_producto_dev
+    username: root
+    password:
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+empresa:
+  ambiente: desarrollo
 
 eureka:
   client:
@@ -13,26 +21,16 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-mensaje:
-  texto: Configuración obtenida desde Config Server para Producto Service
-
-# 🛠️ CONFIGURACIÓN DE RESILIENCE4J CIRCUIT BREAKER
+# 🛡️ CONFIGURACIÓN DE RESILIENCE4J REUBICADA EN LA NUBE
 resilience4j:
   circuitbreaker:
     instances:
-      categoriaService: # Debe llamarse EXACTAMENTE igual que el 'name' de tu anotación @CircuitBreaker
-        slidingWindowType: COUNT_BASED
-        slidingWindowSize: 5          # Analiza las últimas 5 llamadas
-        failureRateThreshold: 50       # Si el 50% falla, abre el circuito
-        waitDurationInOpenState: 10s   # Espera 10 segundos antes de intentar reconectar (Half-Open)
-        permittedNumberOfCallsInHalfOpenState: 3 # En Half-Open, deja pasar 3 llamadas de prueba
+      categoriaService:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
 
-# Habilitar los endpoints de monitoreo en Actuator (Opcional pero recomendado)
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, circuitbreakers
-  endpoint:
-    health:
-      show-details: always
+mensaje:
+  texto: Configuración obtenida desde Config Server para Producto Service
