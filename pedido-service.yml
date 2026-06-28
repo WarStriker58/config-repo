@@ -1,28 +1,6 @@
-spring:
-  application:
-    name: pedido-service
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
-mensaje:
-  texto: Configuración obtenida desde Config Server para Pedido Service
-
-# 🛡️ RESILIENCE4J EN LA NUBE PARA PEDIDOS
 resilience4j:
-  circuitbreaker:
+  bulkhead:
     instances:
-      productoService: # Debe coincidir con el 'name' de la anotación en ProductoCircuitService
-        registerHealthIndicator: true
-        slidingWindowSize: 5
-        minimumNumberOfCalls: 3
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
+      productoBulkhead:
+        maxConcurrentCalls: 2
+        maxWaitDuration: 1s
